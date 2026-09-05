@@ -96,6 +96,7 @@ Issues, ideas, and PRs are welcome — this is very much a work in progress
 and feedback from people poking at real programs is the most useful kind.
 
 ## License
+This project is licensed under the [MIT License](LICENSE).
 
 [LICENSE]
-(LICENSE)
+(LICENS
