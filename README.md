@@ -97,6 +97,3 @@ and feedback from people poking at real programs is the most useful kind.
 
 ## License
 This project is licensed under the [MIT License](LICENSE).
-
-[LICENSE]
-(LICENS
