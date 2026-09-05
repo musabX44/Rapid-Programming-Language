@@ -1,0 +1,18 @@
+extern fn strlen(s: string): int;
+extern fn puts(s: string): int;
+
+fn call_it(f: fn(string): int, s: string): int {
+    return f(s);
+}
+
+fn main() {
+    var g: fn(string): int = strlen;
+    var n: int = g("merhaba");
+    io::out(n);
+
+    var r: int = call_it(strlen, "dunya");
+    io::out(r);
+
+    var p: fn(string): int = puts;
+    p("indirect puts call");
+}

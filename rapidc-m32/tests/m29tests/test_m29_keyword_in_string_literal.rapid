@@ -1,0 +1,12 @@
+// M29 regression: a string literal that happens to contain the word
+// "keyword" inside it must NOT be mistaken for a top-level `keyword ...;`
+// declaration by expand_keyword_decls' text-expansion pass. This is
+// already safe in practice (expand_keyword_decls only matches "keyword"
+// at the start of a line/statement via starts_with_word + a full top-level
+// scan position, not a substring search anywhere in the file), but this
+// test pins that behavior down explicitly so a future change to the
+// scanner can't silently regress it.
+fn main() {
+    io::out("keyword deneme");
+    io::out("this string mentions the keyword word but is not one");
+}

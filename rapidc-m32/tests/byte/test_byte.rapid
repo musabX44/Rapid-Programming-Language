@@ -1,0 +1,40 @@
+fn main() {
+    // byte değişkeni
+    var b: byte = 65;
+    io::out(b);           // 65 (sayı olarak)
+
+    // char literal
+    var c: byte = 'A';
+    io::out(c);           // 65
+
+    // char karşılaştırma
+    if (c == 'A') {
+        io::out(1);       // 1
+    }
+
+    // string indexleme
+    var s: string = "hello";
+    var ch: byte = s[0];
+    io::out(ch);          // 104 ('h')
+
+    io::out(s[1]);        // 101 ('e')
+    io::out(s[4]);        // 111 ('o')
+
+    // byte ile döngü - 'h','e','l','l','o' değerlerini say
+    var i: int = 0;
+    while (i < 5) {
+        io::out(s[i]);
+        i++;
+    }
+
+    // byte aritmetiği
+    var x: byte = 'A';
+    var y: byte = x + 1;
+    io::out(y);           // 66 ('B')
+
+    // char literal ile karşılaştırma
+    var newline: byte = '\n';
+    io::out(newline);     // 10
+
+    return;
+}

@@ -1,0 +1,13 @@
+// M27: minimal FFI - calling libc functions declared with `extern fn`.
+extern fn strlen(s: string): int;
+extern fn printf(fmt: string, ...): int;
+
+fn main() {
+    var n: int = strlen("merhaba");
+    io::out(n);
+
+    printf("Yasin, sayi: %ld\n", 42);
+    printf("iki arg: %ld ve %ld\n", 7, 9);
+
+    return;
+}

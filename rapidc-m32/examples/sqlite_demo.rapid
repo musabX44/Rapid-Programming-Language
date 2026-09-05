@@ -1,0 +1,21 @@
+use "../ffi/sqlite3.rapid";
+
+fn main() {
+    var handle: int = rapidc_sqlite3_open("test.db");
+    var rc: int = rapidc_sqlite3_open_rc();
+    io::out(rc); // 0 = SQLITE_OK
+
+    if (rc != 0) {
+        io::out("acilamadi");
+        return;
+    }
+
+    sqlite3_exec(handle, "CREATE TABLE IF NOT EXISTS kisi (id INTEGER PRIMARY KEY, ad TEXT);", 0, 0, 0);
+    sqlite3_exec(handle, "INSERT INTO kisi (ad) VALUES ('Yasin');", 0, 0, 0);
+
+    var changes: int = sqlite3_changes(handle);
+    io::out(changes); // 1
+
+    sqlite3_close(handle);
+    io::out("bitti");
+}

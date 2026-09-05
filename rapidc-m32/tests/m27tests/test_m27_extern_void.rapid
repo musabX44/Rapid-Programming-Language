@@ -1,0 +1,8 @@
+extern fn puts(s: string): int;
+extern fn exit(code: int): void;
+
+fn main() {
+    puts("cikmadan once");
+    exit(0);
+    puts("buraya asla ulasmaz");
+}

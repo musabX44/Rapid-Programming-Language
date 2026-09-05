@@ -1,0 +1,5 @@
+keyword mysqrt(x: double): double => extern "sqrt" from "m";
+
+fn main() {
+    io::out(mysqrt(4.0));
+}

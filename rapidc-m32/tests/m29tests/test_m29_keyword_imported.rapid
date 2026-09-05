@@ -1,0 +1,7 @@
+use "kwlib.rapid";
+
+fn main() {
+    printf("sayi: %ld\n", 42);
+    printf("iki: %ld ve %ld\n", 7, 9);
+    exit(0);
+}

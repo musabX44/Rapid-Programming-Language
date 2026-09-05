@@ -1,0 +1,12 @@
+// Bu dosyada C/FFI'a dair TEK bir iz yok: sadece std::net'i import edip
+// httpGet'i normal bir RapidC fonksiyonuymus gibi cagiriyoruz.
+use "../std/net.rapid";
+
+fn main() {
+    var status: int* = alloc(8);
+    var body: string = httpGet("http://example.com", status);
+    io::out(*status);
+    io::out(body);
+    httpFree(body);
+    free(status);
+}

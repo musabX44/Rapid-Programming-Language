@@ -1,0 +1,2 @@
+keyword printf(fmt: string, ...): int => extern "printf";
+keyword exit(code: int): void => extern "exit";

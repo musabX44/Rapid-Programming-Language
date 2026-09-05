@@ -1,0 +1,9 @@
+link "m";
+extern fn sqrt(x: double): double;
+extern fn puts(s: string): int;
+
+fn main() {
+    var r: double = sqrt(2.0);
+    io::out(r);
+    puts("done");
+}

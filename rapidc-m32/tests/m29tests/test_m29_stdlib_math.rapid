@@ -1,0 +1,11 @@
+// Bu dosyada tek bir C/FFI ifadesi bile YOK — sadece std kütüphanesini
+// import edip normal RapidC fonksiyonlarıymış gibi kullanıyoruz.
+use "../std/math.rapid";
+
+fn main() {
+    io::out(sqrt(2.0));      // 1.41421
+    io::out(pow(2.0, 10.0)); // 1024
+    io::out(floor(3.9));     // 3
+    io::out(ceil(3.1));      // 4
+    io::out(fabs(0.0 - 5.5)); // 5.5
+}

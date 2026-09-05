@@ -1,0 +1,46 @@
+// M29: unary minus (-expr) regression test.
+//
+// Bug (found while working the M29 TODO): `expr` had no unary-minus rule
+// at all in parser.y — only the binary `expr MINUS expr` rule existed —
+// so ANY leading `-` in expression position was a syntax error. This
+// affected plain negative int literals (`-5`), not just floats as
+// originally suspected (`-5.5`, `fabs(-5.5)`).
+//
+// Fixed by adding `MINUS expr %prec UMINUS` to the grammar, backed by a
+// dedicated EXPR_NEG AST node (ast.h/ast.c), typed in semantic.c as
+// exactly its operand's type, and lowered in codegen.c to QBE's
+// `sub <zero>, x` (QBE has no native `neg` instruction).
+//
+// This test covers: negative int literal, negative float/double literal,
+// unary minus on a variable, double negation, and precedence relative to
+// `*`/`+` (unary minus must bind tighter than binary operators).
+extern fn fabs(x: double): double;
+link "m";
+
+fn main() {
+    // negative int literal
+    var i: int = -5;
+    io::out(i);
+
+    // negative float literal
+    var f: double = -5.5;
+    io::out(f);
+
+    // unary minus through a call argument (the exact TODO repro case)
+    io::out(fabs(-5.5));
+
+    // unary minus on a variable
+    var x: double = 3.5;
+    var y: double = -x;
+    io::out(y);
+
+    // double negation
+    var n: int = 5;
+    io::out(-(-n));
+
+    // precedence: unary minus must bind tighter than * and +
+    var a: int = 3;
+    var b: int = 4;
+    io::out(-a * b); // expect -12, not -(a*b) misparse issues
+    io::out(-a + b); // expect 1
+}

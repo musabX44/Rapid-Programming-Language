@@ -1,0 +1,16 @@
+fn main(): void {
+    var b: byte = 65;
+    var bp: byte* = &b;
+    io::out(*bp);
+
+    *bp = 66;
+    io::out(b);
+
+    var buf: byte* = alloc(4);
+    *buf = 72;
+    *(buf + 1) = 73;
+    io::out(*buf);
+    io::out(*(buf + 1));
+
+    free(buf);
+}

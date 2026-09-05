@@ -1,0 +1,5 @@
+extern fn printf(fmt: string, ...): int;
+fn main() {
+    var p: fn(string): int = printf;
+    p("sadece format, vararg yok\n");
+}

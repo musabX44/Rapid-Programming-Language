@@ -1,0 +1,28 @@
+fn main() {
+    var bs: list<byte> = [];
+    push(bs, 72);
+    push(bs, 105);
+    push(bs, 33);
+    io::out(len(bs));
+
+    for (b in bs) {
+        io::out(b);
+    }
+
+    bs[0] = 104;
+    io::out(bs[0]);
+
+    var copy: list<byte> = listCopy(bs);
+    push(copy, 63);
+    io::out(len(bs));
+    io::out(len(copy));
+
+    var i: int = 0;
+    while (i < 30) {
+        push(bs, i);
+        i = i + 1;
+    }
+    io::out(len(bs));
+
+    return;
+}

@@ -1,0 +1,21 @@
+struct Point {
+    x: int;
+    y: int;
+}
+
+enum Color { RED = 0, GREEN, BLUE = 5, YELLOW }
+
+fn main() {
+    var p: Point = Point { x: 1, y: 2 };
+    io::out(p.x);
+    io::out(p.y);
+    p.x = 42;
+    io::out(p.x);
+    var c: Color = Color::GREEN;
+    io::out(c);
+    var q: int* = &p.y;
+    io::out(*q);
+    *q = 99;
+    io::out(p.y);
+    return;
+}

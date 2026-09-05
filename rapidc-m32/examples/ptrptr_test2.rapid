@@ -1,0 +1,23 @@
+fn set_via_pp(pp: int**, v: int) {
+    **pp = v;
+}
+
+fn get_via_pp(pp: int**): int {
+    return **pp;
+}
+
+fn main() {
+    var x: int = 1;
+    var p: int* = &x;
+    var pp: int** = &p;
+
+    set_via_pp(pp, 55);
+    io::out(x);              // 55
+    io::out(get_via_pp(pp)); // 55
+
+    var y: int = 9;
+    var qp: int* = &y;
+    var qpp: int** = &qp;
+    io::out(pp == qpp);      // 0 (false, different addresses)
+    io::out(pp == pp);       // 1 (true)
+}

@@ -1,0 +1,4 @@
+// Beklenen: semantic error (redeclaration). Negatif test - derlenmemeli.
+extern fn strlen(s: string): int;
+fn strlen(x: int): int { return x; }
+fn main() { return; }

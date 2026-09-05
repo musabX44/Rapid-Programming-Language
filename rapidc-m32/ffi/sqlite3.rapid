@@ -1,0 +1,46 @@
+// ffi/sqlite3.rapid — libsqlite3 icin rapidc FFI baglantisi.
+//
+// Kullanim: bu dosyayi projenize "use" edin, ayrica sqlite3_shim.c'yi
+// (yaninda duran kucuk C sarmalayici) rapidc'nin ciktisiyla birlikte
+// linkleyin -- rapidc tek basina .c dosyasi linklemiyor, bu yuzden final
+// binary'i siz `cc` ile elle birlestirmeniz gerekiyor (asagidaki README
+// notuna bakin). link "sqlite3"; direktifi -lsqlite3'u otomatik ekliyor.
+//
+// Neden bir C shim var: sqlite3_open'in gercek imzasi
+// `int sqlite3_open(const char*, sqlite3 **ppDb)` -- yani "pointer'a
+// pointer" (cikti parametresi). rapidc'nin pointer tipi yalnizca tek
+// seviye (`T*`) destekliyor (`T**` gramer hatasi), o yuzden ppDb'yi
+// dogrudan rapidc tarafinda ifade edemiyoruz. sqlite3_shim.c bu farki
+// kapatiyor: db handle'ini bir cikti parametresi yerine DONUS DEGERI
+// olarak veriyor (pointer, bir tamsayiya gomulmus halde).
+link "sqlite3";
+
+// M31: sqlite3_shim.c artık `shim "...";` ile otomatik derlenip linke
+// ekleniyor -- ayrı bir `cc -c` adımına gerek yok, tek `rapidc
+// sqlite_demo.rapid -o demo` yeterli.
+shim "sqlite3_shim.c";
+
+// rapidc_sqlite3_open(filename) -> db handle (int olarak gomulu pointer;
+// basarisizlikta 0/NULL). Gercek hata kodu icin rapidc_sqlite3_open_rc().
+extern fn rapidc_sqlite3_open(filename: string): int;
+extern fn rapidc_sqlite3_open_rc(): int;
+
+// sqlite3_close(sqlite3 *db) -> int (SQLITE_OK=0)
+extern fn sqlite3_close(db: int): int;
+
+// sqlite3_exec(sqlite3*, const char *sql, callback, void *arg, char **errmsg) -> int
+// callback/arg/errmsg icin bu ilk surumde hepsi 0 (NULL) geciliyor --
+// yani sonuc satirlari geri okunamiyor, sadece "calisti mi calismadi mi"
+// bilgisi aliniyor (CREATE/INSERT/UPDATE/DELETE icin yeterli; SELECT ile
+// satir okumak icin prepared-statement API'si gerekir, bu surumde yok).
+extern fn sqlite3_exec(db: int, sql: string, callback: int, arg: int, errmsg: int): int;
+
+// sqlite3_errmsg(sqlite3*) -> const char*
+extern fn sqlite3_errmsg(db: int): string;
+
+// sqlite3_changes(sqlite3*) -> int  (son exec'in etkiledigi satir sayisi)
+extern fn sqlite3_changes(db: int): int;
+
+// Not: rapidc'de top-level `const` desteklenmiyor (yalnizca fonksiyon
+// icinde), o yuzden SQLITE_OK gibi sabitleri burada tanimlayamiyoruz --
+// cagiran kod donus degerini dogrudan 0 ile karsilastirmali.

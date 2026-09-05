@@ -1,0 +1,11 @@
+fn main() {
+    // alloc/free: raw malloc/free
+    var p: int* = alloc(64);
+    *p = 42;
+    io::out(*p);
+    free(p);
+
+    // raw syscall: SYS_getpid (39) on Linux x86-64
+    var n: int = syscall(39, 0, 0, 0, 0, 0, 0);
+    io::out(n);
+}

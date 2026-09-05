@@ -1,0 +1,15 @@
+fn main() {
+    var x: int = 42;
+    var p: int* = &x;
+    var pp: int** = &p;
+
+    io::out(**pp);          // expect 42
+
+    **pp = 100;
+    io::out(x);              // expect 100 (written through pp -> p -> x)
+
+    var y: int = 7;
+    *pp = &y;                // repoint p to y via pp
+    io::out(*p);              // expect 7
+    io::out(**pp);            // expect 7
+}

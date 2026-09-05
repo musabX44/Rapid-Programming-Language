@@ -1,0 +1,80 @@
+// std/math.rapid — RapidC "standart kütüphane" örneği.
+//
+// Bu dosya, `keyword` özelliği kullanılarak libm'in seçili fonksiyonlarını
+// RapidC'ye tanıtır. Bu dosyayı `use` eden bir RapidC programı, C'nin veya
+// FFI'ın var olduğunu hiç bilmek zorunda değildir — sqrt/pow/sin/cos birer
+// normal RapidC fonksiyonu gibi görünür ve öyle çağrılır.
+//
+// Kullanım:
+//     use "std/math.rapid";
+//     fn main() { io::out(sqrt(2.0)); }
+//
+// Derleme, projedeki her `link "..."` gerektiren programla birebir aynıdır
+// (ekstra bir bayrak/adım YOK — `keyword` derlenirken otomatik `link "m";`
+// üretir, `rapidc` de onu görüp `-lm`'i linklemeye zaten kendisi ekliyor):
+//     ./rapidc app.rapid -o app
+//
+// Kapsam: burada yalnızca imzası `(double...): double` veya `(double,
+// double): double` şeklinde tamamen skaler olan libm fonksiyonları var —
+// yani hepsi doğrudan `keyword`/`extern fn` ile ifade edilebiliyor, HİÇBİR
+// C shim gerekmiyor (bkz. FFI-MANUAL.md §6 — shim yalnızca T**/union-
+// varargs/callback gibi rapidc'nin ifade edemediği imzalarda gerekir;
+// libm'in temel fonksiyonlarının hiçbiri bu kategoriye girmiyor).
+// `frexp`/`modf`/`sincos` gibi çıktı-pointer'lı (`double*`) fonksiyonlar
+// bilinçli olarak dışarıda bırakıldı — kapsam dışı değiller, sadece henüz
+// eklenmediler; `int*` zaten desteklendiği için `double*` çıktı parametreli
+// bir `extern fn` de teoride mümkün, ama bu dosyanın ilk sürümü yalnızca
+// tek-değer-dönen fonksiyonlara odaklandı.
+
+// --- Temel: kök, kuvvet, mutlak değer ---
+keyword sqrt(x: double): double  => extern "sqrt"  from "m";
+keyword cbrt(x: double): double  => extern "cbrt"  from "m";
+keyword pow(x: double, y: double): double => extern "pow" from "m";
+keyword fabs(x: double): double  => extern "fabs"  from "m";
+keyword hypot(x: double, y: double): double => extern "hypot" from "m";
+
+// --- Yuvarlama ---
+keyword floor(x: double): double => extern "floor" from "m";
+keyword ceil(x: double): double  => extern "ceil"  from "m";
+keyword round(x: double): double => extern "round" from "m";
+keyword trunc(x: double): double => extern "trunc" from "m";
+
+// --- Trigonometri ---
+keyword sin(x: double): double   => extern "sin"   from "m";
+keyword cos(x: double): double   => extern "cos"   from "m";
+keyword tan(x: double): double   => extern "tan"   from "m";
+keyword asin(x: double): double  => extern "asin"  from "m";
+keyword acos(x: double): double  => extern "acos"  from "m";
+keyword atan(x: double): double  => extern "atan"  from "m";
+keyword atan2(y: double, x: double): double => extern "atan2" from "m";
+
+// --- Hiperbolik ---
+keyword sinh(x: double): double  => extern "sinh"  from "m";
+keyword cosh(x: double): double  => extern "cosh"  from "m";
+keyword tanh(x: double): double  => extern "tanh"  from "m";
+
+// --- Üstel / logaritmik ---
+keyword exp(x: double): double   => extern "exp"   from "m";
+keyword exp2(x: double): double  => extern "exp2"  from "m";
+keyword log(x: double): double   => extern "log"   from "m";   // doğal log (ln)
+keyword log2(x: double): double  => extern "log2"  from "m";
+keyword log10(x: double): double => extern "log10" from "m";
+
+// --- Kalan / işaret ---
+keyword fmod(x: double, y: double): double => extern "fmod" from "m";
+keyword copysign(x: double, y: double): double => extern "copysign" from "m";
+keyword fmin(x: double, y: double): double => extern "fmin" from "m";
+keyword fmax(x: double, y: double): double => extern "fmax" from "m";
+
+// Not: isnan/isinf bilinçli olarak DIŞARIDA BIRAKILDI. glibc'de bunlar
+// gerçek dünyanın çoğu derleyicisinde derleyici-builtin'i/makro olarak
+// çözülüyor; libm.so'nun dışa aktarılan sembol tablosunda (`nm -D
+// libm.so.6`) çalışma zamanında bağlanabilir bir `isnan`/`isinf` sembolü
+// YOK — yani `extern fn isnan(x: double): int;` yazıp `link "m";` ile
+// linklemeye çalışmak `undefined reference` ile başarısız olurdu (bu proje
+// FFI-MANUAL.md §9'da uyardığı "extern fn imzayı doğrulamaz, ama sembolün
+// var olduğunu da garanti etmez" riskinin somut bir örneği). Aynı testi
+// x != x (NaN her zaman kendine eşit değildir) gibi RapidC'nin kendi
+// karşılaştırma operatörleriyle FFI'sız yapmak mümkün, o yüzden ayrı bir
+// C shim yazmaya değecek bir öncelik değil.
+

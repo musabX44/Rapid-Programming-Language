@@ -1,0 +1,10 @@
+keyword sqrt(x: double): double => extern "sqrt" from "m";
+keyword strlen(s: string): int  => extern "strlen";
+
+fn main() {
+    var r: double = sqrt(2.0);
+    io::out(r);
+
+    var n: int = strlen("merhaba");
+    io::out(n);
+}
