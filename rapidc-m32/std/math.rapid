@@ -66,15 +66,3 @@ keyword copysign(x: double, y: double): double => extern "copysign" from "m";
 keyword fmin(x: double, y: double): double => extern "fmin" from "m";
 keyword fmax(x: double, y: double): double => extern "fmax" from "m";
 
-// Not: isnan/isinf bilinçli olarak DIŞARIDA BIRAKILDI. glibc'de bunlar
-// gerçek dünyanın çoğu derleyicisinde derleyici-builtin'i/makro olarak
-// çözülüyor; libm.so'nun dışa aktarılan sembol tablosunda (`nm -D
-// libm.so.6`) çalışma zamanında bağlanabilir bir `isnan`/`isinf` sembolü
-// YOK — yani `extern fn isnan(x: double): int;` yazıp `link "m";` ile
-// linklemeye çalışmak `undefined reference` ile başarısız olurdu (bu proje
-// FFI-MANUAL.md §9'da uyardığı "extern fn imzayı doğrulamaz, ama sembolün
-// var olduğunu da garanti etmez" riskinin somut bir örneği). Aynı testi
-// x != x (NaN her zaman kendine eşit değildir) gibi RapidC'nin kendi
-// karşılaştırma operatörleriyle FFI'sız yapmak mümkün, o yüzden ayrı bir
-// C shim yazmaya değecek bir öncelik değil.
-
