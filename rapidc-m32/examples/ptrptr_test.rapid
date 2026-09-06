@@ -6,7 +6,7 @@ fn main() {
     io::out(**pp);          // expect 42
 
     **pp = 100;
-    io::out(x);              // expect 100 (written through pp -> p -> x)
+    io::out(x);              // expect 100
 
     var y: int = 7;
     *pp = &y;                // repoint p to y via pp
