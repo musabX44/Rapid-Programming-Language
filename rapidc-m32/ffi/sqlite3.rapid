@@ -5,15 +5,6 @@
 // linkleyin -- rapidc tek basina .c dosyasi linklemiyor, bu yuzden final
 // binary'i siz `cc` ile elle birlestirmeniz gerekiyor (asagidaki README
 // notuna bakin). link "sqlite3"; direktifi -lsqlite3'u otomatik ekliyor.
-//
-// Neden bir C shim var: sqlite3_open'in gercek imzasi
-// `int sqlite3_open(const char*, sqlite3 **ppDb)` -- yani "pointer'a
-// pointer" (cikti parametresi). rapidc'nin pointer tipi yalnizca tek
-// seviye (`T*`) destekliyor (`T**` gramer hatasi), o yuzden ppDb'yi
-// dogrudan rapidc tarafinda ifade edemiyoruz. sqlite3_shim.c bu farki
-// kapatiyor: db handle'ini bir cikti parametresi yerine DONUS DEGERI
-// olarak veriyor (pointer, bir tamsayiya gomulmus halde).
-link "sqlite3";
 
 // M31: sqlite3_shim.c artık `shim "...";` ile otomatik derlenip linke
 // ekleniyor -- ayrı bir `cc -c` adımına gerek yok, tek `rapidc
