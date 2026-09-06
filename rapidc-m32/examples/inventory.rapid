@@ -1,0 +1,37 @@
+use "mathlib.rapid";
+
+efn total_value(price, qty) => price * qty
+
+efn apply_discount(price, percent) => price - (price * percent / 100)
+
+fn print_item(name: string, qty: int, price: double) {
+    var value: double = total_value(price, qty);
+    io::out("{} x{} @ {} = {}", name, qty, price, value);
+}
+
+fn main() {
+    list<string> names = ["Bolt", "Washer", "Bracket"];
+    list<int> quantities = [120, 340, 58];
+    list<double> prices = [0.15, 0.03, 1.42];
+
+    var total: double = 0.0;
+    var i: int = 0;
+
+    for (i in 0..names.length()) {
+        print_item(names[i], quantities[i], prices[i]);
+        total = total + total_value(prices[i], quantities[i]);
+    }
+
+    io::out("Subtotal: {}", total);
+
+    var discounted: double = apply_discount(total, 10);
+    io::out("After 10% discount: {}", discounted);
+
+    if (discounted > 100.0) {
+        io::out("Free shipping applies.");
+    } else if (discounted > 50.0) {
+        io::out("Standard shipping applies.");
+    } else {
+        io::out("Express shipping surcharge applies.");
+    }
+}

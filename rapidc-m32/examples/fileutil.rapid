@@ -1,0 +1,49 @@
+// fileutil.rapid — small wrapper around raw file descriptor I/O
+// demonstrates the FFI story: extern fn, link, and the keyword sugar layer
+
+extern fn strlen(s: string): int;
+link "m";
+
+keyword sqrt = extern fn sqrt(x: double): double;
+
+private fn read_all(path: string): string {
+    var fd: int = io::open(path, 0);
+    if (fd < 0) {
+        io::out("failed to open {} (errno {})", path, io::errno());
+        return "";
+    }
+
+    var buffer: string = "";
+    var chunk: string = io::read(fd, 4096);
+
+    while (strlen(chunk) > 0) {
+        buffer = buffer + chunk;
+        chunk = io::read(fd, 4096);
+    }
+
+    io::close(fd);
+    return buffer;
+}
+
+fn line_count(text: string): int {
+    var count: int = 0;
+    var i: int = 0;
+    while (i < strlen(text)) {
+        if (text[i] == '\n') {
+            count = count + 1;
+        }
+        i = i + 1;
+    }
+    return count;
+}
+
+fn main() {
+    var name: string = io::in();
+    var contents: string = read_all(name);
+
+    io::out("read {} bytes", strlen(contents));
+    io::out("{} lines", line_count(contents));
+
+    var magnitude: double = sqrt(144.0);
+    io::out("sqrt(144) = {}", magnitude);
+}
