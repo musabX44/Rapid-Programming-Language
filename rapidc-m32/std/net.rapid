@@ -21,23 +21,7 @@
 //
 //     rapidc app.rapid -o app
 //     # link "curl"; ve shim "net_shim/net_shim.c"; bu dosyada zaten var
-//
-// Neden bir C shim var (net_shim.c): libcurl'un "easy" API'si hem
-// varargs+union-tipli curl_easy_setopt (VERY_INT/STRING/FUNCTION_PTR
-// hepsi ayni cagri sekli), hem de govdeyi okumak icin bir C fonksiyon
-// pointer'i (WRITEFUNCTION callback) istiyor -- ikisi de rapidc'nin
-// extern fn'inin dogrudan ifade edebildigi seyler degil (bkz.
-// sqlite3.rapid'deki "T** cikti parametresi" siniriyla ayni aile).
-// Shim, tum bu adimlari tek bir duz `char* rapidc_http_get(const char*,
-// long*)` fonksiyonunda gizliyor; rapidc tarafi (bu dosya) o TEK duz
-// fonksiyonu `keyword` ile RapidC'nin kendi kelimesi gibi tanitiyor.
-//
-// İsimlendirme: Rapid! tarafındaki isimler (httpGet/httpFree) bilinçli
-// olarak lowerCamelCase — C sembolü (rapidc_http_get/rapidc_http_free)
-// ve shim dosyası snake_case kalmaya devam ediyor, çünkü `keyword`'ün
-// rename özelliği (bkz. FFI-MANUAL.md §5) zaten Rapid! ismiyle C sembolünü
-// ayrı tutmayı destekliyor — burada yalnızca sol taraf, kullanıcının
-// gördüğü isim, değişti.
+
 
 link "curl";
 shim "net_shim/net_shim.c";
